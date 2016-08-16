@@ -1,7 +1,7 @@
 # BPR-Scripts
 Scripts for the NDN Banana Pi Testbed
 
-![dependencies](https://cloud.githubusercontent.com/assets/16044516/17692463/30ee1108-639a-11e6-85f7-e145faf73784.png)
+![dependencies](https://cloud.githubusercontent.com/assets/16044516/17700969/37d347da-63c8-11e6-9adb-403c773a09a9.png)
 
 Tasked with managing, monitoring and running emulations on a larger number of homogenous nodes (BananaPi-routers to be specific), a sensible level of automation via scripting is essential.
 
@@ -15,17 +15,11 @@ For additional information regarding the scripts or the NDN-Testbed itself, plea
 
 ## emulation
 ------------
-![emulation](https://cloud.githubusercontent.com/assets/16044516/17692470/38efd08a-639a-11e6-9207-5d09569d13c8.png)
+![emulation](https://cloud.githubusercontent.com/assets/16044516/17700974/3d1eb2e2-63c8-11e6-9cd8-442ece681399.png)
 ### all_strategies_emulation.py
 Performs a given number of emulation-runs for every given forwarding-strategy, bandwidth-range and connectivity.
 This script is intended to be used with the NDN-Applications from [https://github.com/danposch/ndn-apps].
 This script changes the files apps.py and rand_network.py before deploying the network in oder to achieve the different configurations, creating the apps_old.py and rand_network_old.py in the process.
-
-### all_strategies_dash.py
-Same functionality as all_strategies_emulation.py, with the difference of additionally taking into account the used adaption-logic of DASH-client applications.
-This script is intended to be used with the NDN-Applications from [https://github.com/theuerse/ndn-DemoApps].
-
-==> Performs a given number of emulation-runs for every given forwarding-strategy, adaption-logic, bandwidth-range and connectivity.
 
 ### emulation.py
 Takes parameters, creates (if necessary) a random network-topology, calls deploy_network.py to establish the virtual network overlay, starts/stops the logging, starts/stops the emulation-applications on the nodes, stops NFDs and logging after emulation completion, collects and stores logs.
@@ -50,7 +44,7 @@ The node-status-files are created using the "logging" CRON-job.
 Utility for emulation.py, creates random network topology-files (generatd_network_top.txt) depending on the given emu-run number and some parameters contained inside the file.
 
 The random topology generator also supports the addition of loss on the virtual links.
-Using netem (man netem, man tc-netem) under the hood, random- Markov- and Gilbert-Elliot loss-models may be used. 
+Using netem (man netem, man tc-netem) under the hood, random- Markov- and Gilbert-Elliot loss-models may be used.
 Given a value for the property LOSS_MODEL, the corresponding python-script is called in order to create a valid netem-command to emulate a certain kind of loss.
 The respective commands become part of the link-descriptions in generated_network_top.txt, using no loss model creates topology-files without any mention of loss.
 The values for LOSS_MODEL may be "", "random_loss_model", "markov_loss_model" and "gilbert_elliot_loss_model".
@@ -85,18 +79,7 @@ Returns a command-string for tc's netem in order to emulate a (possibly bursty) 
 ### apps.py
 Utility-script for deploy_network.py, containing settings for the creation of bash-scripts defining/starting the emulation-applications on the individual nodes.
 
-In everyday use, you may have multiple kinds of apps.py, e.g. apps_simple_consumer.py or apps_dash_consumer.py whereas you replace apps.py with the variant that you need at the moment.
-
-E.g. if you have multiple variations of apps.py, defining/starting different apps and you wish to run emulations using DASH-consumers/producers:
-
-The script apps_dash_consumer.py contains the application-names and additional/specific parameters for the emulation of a DASH-scenario. Before running the emulations, the content of apps.py is replaced with the one of apps_dash_consumer.py in order to run dash-consumers and producers.
-
-### apps_simple_consumer.py
-A version of apps.py containing application-names and settings for the simple ndn-producer / consumer applications.
-(Currently identical to apps.py => setup for running "simple" consumers/producers of the ndn-apps repo).
-
-### apps_dash_consumer.py
-A adapted version of apps.py, referencing different applications and additionally taking into account settings used by DASH-consumers (e.g. adaption-logic, consumers of the ndn-DemoApps repo).
+Before running a emulation, the content of apps.py can be modified in order to define the consumer-/producer-applications to be executed and their respective parameters. E.g. all_strategies_emulation.py modifies apps.py.
 
 ### allPaths.py
 Utility-script for emulation.py, returning all possible paths connecting two nodes in a directed graph.
@@ -105,7 +88,7 @@ Used by deploy_network.py to configure the route-entries in the NFD-Forwarding-I
 
 ## management
 --------------
-![management](https://cloud.githubusercontent.com/assets/16044516/17692483/40984d8a-639a-11e6-93c6-e478f73f7c2b.png)
+![management](https://cloud.githubusercontent.com/assets/16044516/17700982/415dd234-63c8-11e6-923a-a2f94f5520c1.png)
 ### deploy_code.py
 Checks out and installs the latest versions of emulation-software on ALL nodes (Pis).
 This involves cloning/pulling, building and installing specific GitHub-repositories containing emulation-applications and their dependencies.
@@ -124,7 +107,7 @@ Used to e.g. to install additionally needed packages after already having deploy
 
 ### reboot.py
 Reboots ALL nodes.
-In our experience, the nodes/Pis run very reliably, but certain situations (application error, testing a config-change persists, ...) necessitate a collective reboot. 
+In our experience, the nodes/Pis run very reliably, but certain situations (application error, testing a config-change persists, ...) necessitate a collective reboot.
 
 ### rsync.sh
 An example of a command to synchronize a local pi-script-folder with that one on the pi-gateway using the program rysnc.
@@ -132,14 +115,14 @@ An example of a command to synchronize a local pi-script-folder with that one on
 
 ### runcommand.py
 Executes a given command as a given user on ALL nodes.
-Connects to the individual Pis using SSH an executes the command. 
+Connects to the individual Pis using SSH an executes the command.
 
 ### temperaturs.py
 Prints the SOC- and HDD-temperatures of ALL nodes. A secondary use can be to check the availability/reachability of the nodes, as this script fails if one node is not reachable / crashed (SSH connection cannot be established).
 
 ## logging
 ------------
-![logging](https://cloud.githubusercontent.com/assets/16044516/17692492/44212382-639a-11e6-9e28-b374d055963b.png)
+![logging](https://cloud.githubusercontent.com/assets/16044516/17700987/45ce8ae8-63c8-11e6-8c75-9530c69648f4.png)
 ### client.sh
 A bash-script which garthers the current system state of a node (running services, CPU-load, memory, temperatures, ...), formats it in JSON and prints the information to stdout.
 
@@ -190,7 +173,7 @@ A slightly modified version (different time-interval) of this command runs on th
 
 ## network-topology (examples)
 ------------------------------
-![networktopologies](https://cloud.githubusercontent.com/assets/16044516/17692499/4964ba16-639a-11e6-8dd0-7a618640adc5.png)
+![networktopologies](https://cloud.githubusercontent.com/assets/16044516/17700993/4a05cd4c-63c8-11e6-961c-e636fbc3e264.png)
 ### network.txt
 An illustrative example of a network-topology-file.
 Especially useful if one is just in the process of getting familiar with the network-topology-file-format.
@@ -231,7 +214,7 @@ The third section specifies the roles of the individual nodes and their affiliat
 
 ## utility
 ------------
-![utility](https://cloud.githubusercontent.com/assets/16044516/17692503/4ed60d88-639a-11e6-8438-7d3688358cc4.png)
+![utility](https://cloud.githubusercontent.com/assets/16044516/17700997/4d7734f2-63c8-11e6-98f7-f6cbd3da8d85.png)
 ### ssh_lib.py
 A friendly python SSH2 interface, used by virtually all management and some emulation-scripts.
 
