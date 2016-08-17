@@ -76,6 +76,9 @@ Returns a command-string for tc's netem in order to emulate a (possibly bursty) 
 ### gilbert_elliot_loss_model.py
 Returns a command-string for tc's netem in order to emulate a (possibly bursty) packet-loss using a variation of the Gilbert-Elliot-loss-model. (Bernoulli, Simple Gilbert, Gilbert, GilbertElliot)
 
+### loss_model.py
+Utility for the loss models, containing shared settings and methods.
+
 ### apps.py
 Utility-script for deploy_network.py, containing settings for the creation of bash-scripts defining/starting the emulation-applications on the individual nodes.
 
